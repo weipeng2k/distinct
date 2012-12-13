@@ -35,7 +35,7 @@ public class DistinctMethod {
                                                                        new Class[] { MatchDB.class },
                                                                        new GetAndReleaseHandler());
 
-    private ExecutorService pool    = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
+    private ExecutorService pool    = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4);
 
     public DistinctMethod(){
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -183,7 +183,7 @@ public class DistinctMethod {
         public void run() {
             try {
                 int matchCount = matchDB.match(mr.getMethodName());
-
+                System.out.println(cdl.getCount());
                 mr.addCalledTime(matchCount);
             } finally {
                 cdl.countDown();

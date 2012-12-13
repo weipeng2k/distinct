@@ -43,7 +43,7 @@ public class JedisPool {
         }
         for (int i = 0; i < num; i++) {
             Jedis jedis = new Jedis(properties.get("redis.ip").toString().trim(),
-                                    Integer.parseInt(properties.get("redis.port").toString().trim()));
+                                    Integer.parseInt(properties.get("redis.port").toString().trim()), 0);
             queue.addLast(jedis);
         }
 
