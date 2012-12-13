@@ -15,6 +15,7 @@ distinct
 
 
 (2)构建工程：
+需要安装git，如果是ubuntu 可以sudo apt-get install git
 
 git clone https://github.com/weipeng2k/distinct.git
 
