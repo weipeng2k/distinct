@@ -27,4 +27,4 @@ or
 
 mvn eclipse:eclipse ==> import to eclipse. run com.murdock.tools.distinct.Main
 
-[结果](http://photo2.bababian.com/upload6/20121214/DB99B2CAC65C6BD64D7DC2560A1AA33D_500.jpg)
+![结果](http://photo2.bababian.com/upload6/20121214/DB99B2CAC65C6BD64D7DC2560A1AA33D_500.jpg)
