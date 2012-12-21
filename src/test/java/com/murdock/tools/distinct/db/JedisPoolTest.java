@@ -1,11 +1,13 @@
 package com.murdock.tools.distinct.db;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.murdock.tools.distinct.db.redis.JedisPool;
 
 import redis.clients.jedis.Jedis;
 
+@Ignore
 public class JedisPoolTest {
 
     @Test

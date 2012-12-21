@@ -1,5 +1,6 @@
 package com.murdock.tools.distinct.hsql;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -8,6 +9,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.murdock.tools.distinct.db.MatchDB;
 
+@Ignore
 @ContextConfiguration(locations = { "classpath:test-applicationContext.xml" })
 public class DBCreatorTest extends AbstractJUnit4SpringContextTests {
 

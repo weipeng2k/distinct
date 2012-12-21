@@ -11,6 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 import javax.swing.Timer;
 
+import org.junit.Ignore;
+
+@Ignore
 public class TestJProgressBar {
 
     JFrame       frame         = new JFrame("≤‚ ‘Ω¯∂»Ãı");

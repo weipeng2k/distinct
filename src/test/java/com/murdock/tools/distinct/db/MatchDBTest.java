@@ -29,9 +29,6 @@ public class MatchDBTest {
             };
             thread.start();
         }
-        
-        
-        Thread.sleep(100000);
 
     }
 }

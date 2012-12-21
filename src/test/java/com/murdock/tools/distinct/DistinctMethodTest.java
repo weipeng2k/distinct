@@ -8,6 +8,7 @@ package com.murdock.tools.distinct;
 import java.io.File;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.murdock.tools.distinct.domain.MethodRelation;
@@ -15,6 +16,7 @@ import com.murdock.tools.distinct.domain.MethodRelation;
 /**
  * @author weipeng 2012-12-3 обнГ8:18:40
  */
+@Ignore
 public class DistinctMethodTest {
 
     @Test

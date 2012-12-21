@@ -11,7 +11,7 @@
 	<url>http://maven.apache.org</url>
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.sourceEncoding>GBK</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
@@ -93,6 +93,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -100,6 +101,7 @@
 					<showWarnings>true</showWarnings>
 					<executable>${env.JAVA_HOME}/bin/javac</executable>
 					<fork>true</fork>
+					<encoding>GBK</encoding>
 				</configuration>
 			</plugin>
 		</plugins>
