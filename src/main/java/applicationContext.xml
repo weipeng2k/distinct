@@ -8,25 +8,44 @@
 	<bean class="com.murdock.tools.distinct.Main" />
 
 	<bean id="antxConfig" class="com.murdock.tools.distinct.AntxConfig" />
-	
+
 	<bean id="distinctMethod" class="com.murdock.tools.distinct.DistinctMethod" />
 
-	<bean id="jedisMatchDBPointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut">
-		<property name="patterns">
-			<list>
-				<value>com.murdock.tools.distinct.db.redis.MatchDBImpl.*</value>
-			</list>
-		</property>
+	<!-- <bean id="jedisMatchDBPointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut"> -->
+	<!-- <property name="patterns"> -->
+	<!-- <list> -->
+	<!-- <value>com.murdock.tools.distinct.db.redis.MatchDBImpl.*</value> -->
+	<!-- </list> -->
+	<!-- </property> -->
+	<!-- </bean> -->
+
+	<!-- <bean id="releaseConnectionIntercepter" -->
+	<!-- class="com.murdock.tools.distinct.db.redis.GetAndReleaseIntercepter" 
+		/> -->
+
+	<!-- <aop:config> -->
+	<!-- <aop:advisor advice-ref="releaseConnectionIntercepter" -->
+	<!-- pointcut-ref="jedisMatchDBPointcut" /> -->
+	<!-- </aop:config> -->
+
+	<!-- <bean id="matchDB" class="com.murdock.tools.distinct.db.redis.MatchDBImpl" 
+		/> -->
+
+	<bean id="matchDB" class="com.murdock.tools.distinct.db.hsql.MatchDBImpl" />
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="org.hsqldb.jdbc.JDBCDriver" />
+		<property name="url" value="jdbc:hsqldb:mem:/mydb" />
+		<property name="username" value="sa" />
+		<property name="password" value="" />
+		<property name="maxActive" value="20" />
+		<property name="initialSize" value="20" />
 	</bean>
 
-	<bean id="releaseConnectionIntercepter"
-		class="com.murdock.tools.distinct.db.redis.GetAndReleaseIntercepter" />
+	<bean class="org.springframework.jdbc.core.JdbcTemplate" />
 
-	<aop:config>
-		<aop:advisor advice-ref="releaseConnectionIntercepter"
-			pointcut-ref="jedisMatchDBPointcut" />
-	</aop:config>
-	
-	<bean id="matchDB" class="com.murdock.tools.distinct.db.redis.MatchDBImpl" />
+	<bean id="dbCreator" class="com.murdock.tools.distinct.db.hsql.DBCreator"
+		init-method="initial" />
 
 </beans>
