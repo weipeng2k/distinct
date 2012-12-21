@@ -13,7 +13,7 @@ import java.util.List;
 public interface MatchDB {
 
     /**
-     * 加入一条记录
+     * 加入一条记录，这个主要是将模板作为一个值放置入DB
      * 
      * @param row
      * @return

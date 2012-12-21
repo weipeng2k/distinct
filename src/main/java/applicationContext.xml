@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="GBK"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
+	default-autowire="byName">
+
+	<bean class="com.murdock.tools.distinct.Main" />
+
+	<bean id="antxConfig" class="com.murdock.tools.distinct.AntxConfig" />
+	
+	<bean id="distinctMethod" class="com.murdock.tools.distinct.DistinctMethod" />
+
+	<bean id="jedisMatchDBPointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut">
+		<property name="patterns">
+			<list>
+				<value>com.murdock.tools.distinct.db.redis.MatchDBImpl.*</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="releaseConnectionIntercepter"
+		class="com.murdock.tools.distinct.db.redis.GetAndReleaseIntercepter" />
+
+	<aop:config>
+		<aop:advisor advice-ref="releaseConnectionIntercepter"
+			pointcut-ref="jedisMatchDBPointcut" />
+	</aop:config>
+	
+	<bean id="matchDB" class="com.murdock.tools.distinct.db.redis.MatchDBImpl" />
+
+</beans>

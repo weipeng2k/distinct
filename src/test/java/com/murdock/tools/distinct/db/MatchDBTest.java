@@ -5,6 +5,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
 
+import com.murdock.tools.distinct.db.redis.GetAndReleaseHandler;
+
 public class MatchDBTest {
 
     @Test

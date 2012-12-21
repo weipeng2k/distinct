@@ -21,6 +21,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import com.murdock.tools.distinct.domain.MethodRelation;
 import com.murdock.tools.distinct.util.FileUtils;
 import com.murdock.tools.distinct.util.NetworkUtils;
@@ -29,8 +31,8 @@ import com.murdock.tools.distinct.util.TextUtils;
 public class Main extends JFrame {
 
     private static final long serialVersionUID           = -7446418295640581930L;
-    private DistinctMethod    dm                         = new DistinctMethod();
-    private AntxConfig        ac                         = new AntxConfig();
+    private DistinctMethod    distinctMethod;
+    private AntxConfig        antxConfig;
     private JLabel            pathLabel                  = new JLabel("填写工程目录(用逗号隔开)");
     private JTextField        path                       = new JTextField(30);
     private JButton           genDBButton                = new JButton("生成DB");
@@ -59,7 +61,7 @@ public class Main extends JFrame {
                 if (result == 0) {
                     try {
                         File[] files = FileUtils.convert(path.getText());
-                        dm.constructDB(files);
+                        distinctMethod.constructDB(files);
                         JOptionPane.showMessageDialog(jsp, "DB已经生成", "提示", JOptionPane.OK_CANCEL_OPTION);
                     } catch (FileNotFoundException ex) {
                         JOptionPane.showMessageDialog(jsp, "[填写工程目录]输入的文件路径不存在", "错误", JOptionPane.ERROR_MESSAGE);
@@ -77,10 +79,10 @@ public class Main extends JFrame {
 
                 if (result == 0) {
                     // 除了自己有人
-                    if (dm.userNum() > 1) {
+                    if (distinctMethod.userNum() > 1) {
                         JOptionPane.showMessageDialog(jsp, "有其他使用者，不能清除DB", "提示", JOptionPane.OK_CANCEL_OPTION);
                     } else {
-                        dm.cleanDB();
+                        distinctMethod.cleanDB();
                         JOptionPane.showMessageDialog(jsp, "DB已经清除", "提示", JOptionPane.OK_CANCEL_OPTION);
                     }
                 }
@@ -92,7 +94,7 @@ public class Main extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                List<String> list = dm.getProjectNames();
+                List<String> list = distinctMethod.getProjectNames();
                 if (list.isEmpty()) {
                     JOptionPane.showMessageDialog(jsp, "DB没有数据", "提示", JOptionPane.OK_CANCEL_OPTION);
                 } else {
@@ -101,7 +103,7 @@ public class Main extends JFrame {
                         sb.append(item).append("\n");
                     }
 
-                    sb.append("DB中的文件数：" + dm.getSize());
+                    sb.append("DB中的文件数：" + distinctMethod.getSize());
 
                     JOptionPane.showMessageDialog(jsp, sb.toString(), "已经添加的工程", JOptionPane.OK_CANCEL_OPTION);
                 }
@@ -119,7 +121,7 @@ public class Main extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (dm.getProjectNames().isEmpty()) {
+                if (distinctMethod.getProjectNames().isEmpty()) {
                     JOptionPane.showMessageDialog(jsp, "先生成DB再进行扫描", "警告", JOptionPane.WARNING_MESSAGE);
                 } else {
                     try {
@@ -128,9 +130,9 @@ public class Main extends JFrame {
                         String[] classNames = TextUtils.getInputs(classNameNotContains.getText());
                         String[] methodNames = TextUtils.getInputs(methodNameNotContains.getText());
 
-                        List<MethodRelation> list = dm.constructMethod(files);
+                        List<MethodRelation> list = distinctMethod.constructMethod(files);
 
-                        dm.matchMethod(list);
+                        distinctMethod.matchMethod(list);
 
                         Iterator<MethodRelation> iterator = list.iterator();
 
@@ -197,11 +199,11 @@ public class Main extends JFrame {
 
                 try {
                     String defaultAntx = JOptionPane.showInputDialog(jsp, "输入figo应用名称");
-                    ac.constructProp(defaultAntx);
+                    antxConfig.constructProp(defaultAntx);
 
-                    while (ac.getProp() == null || ac.getProp().isEmpty()) {
+                    while (antxConfig.getProp() == null || antxConfig.getProp().isEmpty()) {
                         defaultAntx = JOptionPane.showInputDialog(jsp, "重新输入figo应用名称 eg:trading");
-                        ac.constructProp(defaultAntx);
+                        antxConfig.constructProp(defaultAntx);
                     }
 
                     File file = null;
@@ -214,17 +216,17 @@ public class Main extends JFrame {
                         file = new File(dk);
                     }
 
-                    ac.constructDK(file);
+                    antxConfig.constructDK(file);
 
                     StringBuilder sb = new StringBuilder();
-                    List<String> need = ac.needKV();
+                    List<String> need = antxConfig.needKV();
                     sb.append("需要的antx配置：\n");
                     for (String r : need) {
                         sb.append(r).append("\n");
                     }
                     sb.append("共" + need.size() + "项。\n");
                     sb.append("==========================================================================\n");
-                    List<String> notNeed = ac.doNotNeedKV();
+                    List<String> notNeed = antxConfig.doNotNeedKV();
                     sb.append("不需要的antx配置：\n");
                     for (String r : notNeed) {
                         sb.append(r).append("\n");
@@ -237,8 +239,8 @@ public class Main extends JFrame {
                     JOptionPane.showMessageDialog(jsp, "figo应用名称不存在", "错误", JOptionPane.ERROR_MESSAGE);
                     return;
                 } finally {
-                    ac.deleteDK();
-                    ac.deleteProp();
+                    antxConfig.deleteDK();
+                    antxConfig.deleteProp();
                 }
             }
         });
@@ -248,17 +250,29 @@ public class Main extends JFrame {
         area.setAutoscrolls(true);
         area.setEditable(false);
         this.add(jsp);
-
+        this.setTitle("无用代码扫描工具(CodeName:MOLLY-DISTINCT)");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800, 600);
+        this.setVisible(true);
+    }
+    
+    public void setDistinctMethod(DistinctMethod distinctMethod) {
+        this.distinctMethod = distinctMethod;
+    }
+
+    public void setAntxConfig(AntxConfig antxConfig) {
+        this.antxConfig = antxConfig;
     }
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        Main main = new Main();
-        main.setTitle("无用代码扫描工具(CodeName:MOLLY-DISTINCT)");
-        main.setVisible(true);
-        main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext(
+                                                                                               "classpath:applicationContext.xml");
+        
+        applicationContext.start();
+
+        applicationContext.registerShutdownHook();
     }
 }

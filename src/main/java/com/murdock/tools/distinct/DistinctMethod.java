@@ -6,7 +6,6 @@
 package com.murdock.tools.distinct;
 
 import java.io.File;
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.murdock.tools.distinct.config.Constant;
-import com.murdock.tools.distinct.db.GetAndReleaseHandler;
 import com.murdock.tools.distinct.db.MatchDB;
 import com.murdock.tools.distinct.domain.MethodRelation;
 import com.murdock.tools.distinct.parser.JavaMethodBodyParser;
@@ -31,11 +29,9 @@ import com.murdock.tools.distinct.util.IOUtils;
  */
 public class DistinctMethod {
 
-    private MatchDB         matchDB = (MatchDB) Proxy.newProxyInstance(this.getClass().getClassLoader(),
-                                                                       new Class[] { MatchDB.class },
-                                                                       new GetAndReleaseHandler());
+    private MatchDB         matchDB;
 
-    private ExecutorService pool    = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4);
+    private ExecutorService pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4);
 
     public DistinctMethod(){
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -189,6 +185,10 @@ public class DistinctMethod {
                 cdl.countDown();
             }
         }
+    }
+
+    public void setMatchDB(MatchDB matchDB) {
+        this.matchDB = matchDB;
     }
 
     public static void main(String[] args) {

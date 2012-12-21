@@ -3,17 +3,19 @@
  * Alibaba.com ("Confidential Information"). You shall not disclose such Confidential Information and shall use it only
  * in accordance with the terms of the license agreement you entered into with Alibaba.com.
  */
-package com.murdock.tools.distinct.db;
+package com.murdock.tools.distinct.db.redis;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import com.murdock.tools.distinct.config.Constant;
+import com.murdock.tools.distinct.db.MatchDB;
 
 /**
  * <pre>
- * 能够在启动和关闭时完成用户数量的计算
+ * 能够在启动和关闭时完成用户数量的计算，使用Redis来完成
+ * 中央节点存储
  * 
  * </pre>
  * 
